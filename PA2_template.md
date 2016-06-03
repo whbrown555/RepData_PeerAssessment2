@@ -1,6 +1,6 @@
 # Health and Economic Impact of Severe Weather in the United States
 # Synopsis
-The basic goal of this data analisys is to explore the NOAA Storm Database and address the following questions about severe weather events:
+The basic goal of this data analisys is to explore a published data set from the NOAA - National Weather Service Severe Storm Database, and address the following questions about severe weather events:
 
 1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
 2. Across the United States, which types of events have the greatest economic consequences?
@@ -49,6 +49,7 @@ require(knitr)
 ```
 ## Loading required package: knitr
 ```
+
 
 
 
@@ -136,7 +137,7 @@ stormData$CROPDMG[(stormData$CROPDMGEXP %in% c("?", "-", "+"))]
 ```
 
 
-## Tidy up the \*EXP and EVTYPEvariables
+## Tidy up the \*EXP and EVTYPE variables
 ### Tidy \*EXP
 
 In the previous step we observed that the number of \*EXP values in the vector, c( "", "?", "+", "-") were very low. Based on the number of occurrences and the corresponding \*DMG values, we can safely assign an value of 0 (zero) to non-alphanumeric \*EXP values.
@@ -328,15 +329,7 @@ The ggplot2, grid and gridExtra packages were used to plot the relationship betw
 
 ## Health Impact
 
-Health impacts (life and limb) are clearly dominated by "Tornado" class events. I believe that this would have emerged whether the data had been "tidied" or not.
-
-## Economic Impact
-
-Serious flooding (vs. Flash flooding, small streams, etc.) render the greatest overall economic impact and property damage in particular. 
-Crop damage on the other hand suffers its greatest impact from tornadoes. 
-
-## explore the relationships using  ggplot
-
+As indicated in Figure 1, below, health impacts (life and limb) are clearly dominated by *"Tornado"* class events. I believe that this would have emerged whether the EVTYPE varriable had been "tidied" or not.
 
 ```r
 require(ggplot2)
@@ -384,10 +377,18 @@ gg2<- gg2 + xlab("")
 gg2<- gg2 + ylab("Injuries")
 gg2<- gg2 + theme(axis.text.x = element_text(angle=90))
 
-grid.arrange(gg1, gg2, ncol = 2, top = "Health Impact of Severe Weather in the United States by Event Type")
+grid.arrange(gg1, gg2, ncol = 2, top = "Health Impact of Severe Weather in the United States by Event Type", bottom = "Figure 1")
 ```
 
 ![](PA2_template_files/figure-html/unnamed-chunk-9-1.png)
+
+## Economic Impact
+
+Figure 2, below, shows that *serious flooding* events (vs. Flash flooding, small streams, etc.) render the greatest overall economic impact, driven primarily by property damage value in particular. 
+While not impacting the overall economic impact as dramatically, crop damage, on the other hand, suffers its greatest impact from *tornadoes*. 
+
+## explore the relationships using  ggplot
+
 
 ```r
 # Economic Impact Analysis
@@ -405,7 +406,7 @@ gg2<- gg2 + theme(axis.text.x = element_text(angle=90))
 
 require(grid)
 require(gridExtra)
-grid.arrange(gg1, gg2, ncol = 2, top = "Economic Impact (US-$) of Severe Weather in the United States by Event Type")
+grid.arrange(gg1, gg2, ncol = 2, top = "Economic Impact (US-$) of Severe Weather in the United States by Event Type", bottom = "Figure 2")
 ```
 
-![](PA2_template_files/figure-html/unnamed-chunk-9-2.png)
+![](PA2_template_files/figure-html/unnamed-chunk-10-1.png)
