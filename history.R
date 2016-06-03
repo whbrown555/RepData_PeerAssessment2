@@ -1,0 +1,17 @@
+getwd()
+setwd("DataScience")
+dir()
+setwd("ReproducableResearch")
+dir
+dir()
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","repdata%2Fdata%2FStormData.csv.bz2")
+unzip("repdata%2Fdata%2FStormData.csv.bz2")
+?unzip
+getOption("unzip")
+warnings()
+read.csv("repdata%2Fdata%2FStormData.csv.bz2")
+stormData<-read.csv("repdata%2Fdata%2FStormData.csv.bz2")
+View(stormData)
+dim(stormData)
+tail(stormData)
+head(stormData)
