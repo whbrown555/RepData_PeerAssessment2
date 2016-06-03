@@ -1,4 +1,5 @@
 *.RData
 *.bz2
-*.zip
 *.rdb
+*.rdx
+*.zip

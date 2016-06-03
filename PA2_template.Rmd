@@ -2,6 +2,8 @@
 title: "Health and Economic Impact of Severe Weather in the United States"
 output: 
   html_document:
+    toc: true
+    theme: united
     keep_md: true
 ---
 # Synopsis
@@ -37,7 +39,7 @@ knitr::opts_chunk$set(cache=TRUE)
 ```
 ```{r}
 setwd("~/GitHub/RepData_PeerAssessment2")
-# download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","repdata%2Fdata%2FStormData.csv.bz2")
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","repdata%2Fdata%2FStormData.csv.bz2")
 stormData<-read.csv("repdata%2Fdata%2FStormData.csv.bz2")
 ```
 
@@ -154,7 +156,8 @@ cdie/cdTotal
 
 The percentage of the values of each of the metrics is greater than 5%, so it is advisable to "tidy up" the EVTYPE values.
 
-Take a first cut at matching the sdata$EVTYPE values with the NOAA Standard EVTYPE values using a tool like Excel. The formulas are intact in the column, "NOAA\_EVTYPE\_FIRST\_CUT\_DO\_NOT\_USE\_IN\_ANALYSIS". Note the file: 
+Take a first cut at matching the sdata$EVTYPE values with the NOAA Standard EVTYPE values using a tool like Excel. The formulas are intact in the column, "NOAA\_EVTYPE\_FIRST\_CUT\_DO\_NOT\_USE\_IN\_ANALYSIS". Note the Excel file:
+ [EVTYPE_MAP.xlsx](https://github.com/whbrown555/RepData_PeerAssessment2/blob/master/EVTYPE_MAP.xlsx) 
 
 Review the EVTYPE data resolving ambiguities with common sense and references to the REMARKS variable.
 
@@ -183,8 +186,8 @@ dead$IMPACT_TYPE <- "FATALITIES"
 colnames(dead)<- c("NOAA_EVTYPE","IMPACT_VAL","IMPACT_TYPE")
 dead$NOAA_EVTYPE <- factor(dead$NOAA_EVTYPE, 
                            levels = dead$NOAA_EVTYPE[order(-dead$IMPACT_VAL)])
-# dead<-dead[order(-xtfrm(dead$IMPACT_VAL),dead$NOAA_EVTYPE),]
-# rownames(dead)<-seq(1:nrow(dead))
+dead<-dead[order(-xtfrm(dead$IMPACT_VAL),dead$NOAA_EVTYPE),]
+rownames(dead)<-seq(1:nrow(dead))
 
 # Health - Injuries
 wounded <- aggregate(INJURIES ~ NOAA_EVTYPE, data = tidy_sdata, FUN = sum)
@@ -192,8 +195,8 @@ wounded$IMPACT_TYPE <- "INJURIES"
 colnames(wounded)<- c("NOAA_EVTYPE","IMPACT_VAL","IMPACT_TYPE")
 wounded$NOAA_EVTYPE <- factor(wounded$NOAA_EVTYPE, 
                            levels = wounded$NOAA_EVTYPE[order(-wounded$IMPACT_VAL)])
-# wounded<-wounded[order(-xtfrm(wounded$IMPACT_VAL),wounded$NOAA_EVTYPE),]
-# rownames(wounded)<-seq(1:nrow(wounded))
+wounded<-wounded[order(-xtfrm(wounded$IMPACT_VAL),wounded$NOAA_EVTYPE),]
+rownames(wounded)<-seq(1:nrow(wounded))
 
 # Economic - Property Damage
 property <- aggregate(PROPDMGVAL ~ NOAA_EVTYPE, data = tidy_sdata, FUN = sum)
@@ -201,8 +204,8 @@ property$IMPACT_TYPE <- "PROPDMGVAL"
 colnames(property)<- c("NOAA_EVTYPE","IMPACT_VAL","IMPACT_TYPE")
 property$NOAA_EVTYPE <- factor(property$NOAA_EVTYPE, 
                            levels = property$NOAA_EVTYPE[order(-property$IMPACT_VAL)])
-# property<-property[order(-xtfrm(property$IMPACT_VAL),property$NOAA_EVTYPE),]
-# rownames(property)<-seq(1:nrow(property))
+property<-property[order(-xtfrm(property$IMPACT_VAL),property$NOAA_EVTYPE),]
+rownames(property)<-seq(1:nrow(property))
 
 # Economic - Crop Damage
 crops <- aggregate(CROPDMGVAL ~ NOAA_EVTYPE, data = tidy_sdata, FUN = sum)
@@ -210,8 +213,8 @@ crops$IMPACT_TYPE <- "CROPDMGVAL"
 colnames(crops)<- c("NOAA_EVTYPE","IMPACT_VAL","IMPACT_TYPE")
 crops$NOAA_EVTYPE <- factor(crops$NOAA_EVTYPE, 
                            levels = crops$NOAA_EVTYPE[order(-crops$IMPACT_VAL)])
-# crops<-crops[order(-xtfrm(crops$IMPACT_VAL),crops$NOAA_EVTYPE),]
-# rownames(crops)<-seq(1:nrow(crops))
+crops<-crops[order(-xtfrm(crops$IMPACT_VAL),crops$NOAA_EVTYPE),]
+rownames(crops)<-seq(1:nrow(crops))
 ```
 
 # Results
@@ -256,16 +259,13 @@ gg1<- gg1 + xlab("")
 gg1<- gg1 + ylab("Property Damage")
 gg1<- gg1 + theme(axis.text.x = element_text(angle=90))
 
-
 gg2<- ggplot(wounded[1:5,], aes(x = NOAA_EVTYPE, y = IMPACT_VAL)) 
 gg2<- gg2 + geom_bar(stat = "identity")
 gg2<- gg2 + xlab("")
 gg2<- gg2 + ylab("Crop Damage")
 gg2<- gg2 + theme(axis.text.x = element_text(angle=90))
 
-
 require(grid)
 require(gridExtra)
 grid.arrange(gg1, gg2, ncol = 2, top = "Economic Impact (US-$) of Severe Weather in the United States by Event Type")
-
 ```
